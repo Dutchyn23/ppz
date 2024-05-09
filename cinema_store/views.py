@@ -96,11 +96,11 @@ import os
 
 def generate_pdf_file(response, selected_tickets):
     fn = 'C:/Users/romad/Desktop/CinemaStore/cinema_store/static/Roboto-Regular.ttf'
-    pdfmetrics.registerFont(ttfonts.TTFont('Roboto', fn, 'UTF-8'))
+    # pdfmetrics.registerFont(ttfonts.TTFont('Roboto', fn, 'UTF-8'))
     default_font = 'Roboto'
 
     p = canvas.Canvas(response)
-    p.setFont(default_font, 12)  # Set font and size
+    # p.setFont(default_font, 12)  # Set font and size
 
     tickets = Ticket.objects.filter(id__in=selected_tickets)
     # Create a PDF document
