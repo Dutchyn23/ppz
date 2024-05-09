@@ -63,5 +63,5 @@ class Ticket(models.Model):
   session = models.ForeignKey(Session, on_delete=models.CASCADE)
   price = models.DecimalField(max_digits=5, decimal_places=2, validators=[MinValueValidator(0.0)], default=50)
   is_available = models.BooleanField(default=True)
-  seat_number = models.IntegerField()  # Field for seat number
-  row_number = models.CharField(max_length=10)  # Field for row number (adjust max_length as needed)
+  seat_number = models.IntegerField()
+  row_number = models.CharField(max_length=10)

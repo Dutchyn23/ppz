@@ -17,10 +17,8 @@ def index(request):
     cinemas = Cinema.get_all_cinemas()
     cinemas_with_films = []
     for cinema in cinemas:
-        #halls = cinema.hall_set.filter(session__date=session_date)
         halls = cinema.hall_set.all()
         sessions_by_films = {}
-        #print(cinema.name)
         if halls:
             for hall in halls:
                 sessions = hall.session_set.filter(date=session_date)
@@ -39,7 +37,6 @@ def index(request):
                                 film[s.hall_id] = [d]
                         else:
                             sessions_by_films[s.film_id] = {s.hall_id:[d]}
-                #print(sessions_by_films)
             cinema_data = {
                 'id': cinema.id,
                 'name': cinema.name,
@@ -51,7 +48,6 @@ def index(request):
             }
             cinemas_with_films.append(cinema_data)
 
-    #print(cinemas_with_films)
     data = {}
     data['cinemas_with_films'] = cinemas_with_films
     return render(request, 'index.html', data)
@@ -65,30 +61,26 @@ def session_page(request, session_id):
     session = Session.objects.get(id=session_id)
     film = session.film_id
     tickets = session.ticket_set.filter(is_available=True)
-    #tickets = session.ticket_set.all() # for testing
     context = {"film": film, "session": session, 'tickets': tickets}
     return render(request, "session.html", context)
 
 
 from django.http import JsonResponse
 from .models import Ticket
-#from django.http import HttpResponse
 import json
 
 #@login_required
 def buy_tickets(request):
   if request.method == 'POST':
       json_data = json.loads(request.body)
-      selected_tickets = json_data.get('selected_tickets')  # Retrieve selected ticket IDs
-      # Example logic for updating ticket status (assuming a boolean field `is_available`)
+      selected_tickets = json_data.get('selected_tickets')
       print(selected_tickets)
       for ticket_id in selected_tickets:
-          ticket = Ticket.objects.get(pk=ticket_id)  # Retrieve the ticket object
+          ticket = Ticket.objects.get(pk=ticket_id)
           ticket.is_available = False
           ticket.save()
-      # Generate PDF content
       response = HttpResponse(content_type='application/pdf')
-      response['Content-Disposition'] = 'attachment; filename=ticket.pdf'  # Set download filename
+      response['Content-Disposition'] = 'attachment; filename=ticket.pdf'
       generate_pdf_file(response, selected_tickets)
       return response
   else:
