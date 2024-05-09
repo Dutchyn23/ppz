@@ -1,4 +1,5 @@
 from io import BytesIO
+from pathlib import Path
 
 from django.shortcuts import render
 from cinema_store.models import Cinema, Session, Film
@@ -95,12 +96,13 @@ import os
 #fn = '/Roboto-Regular.ttf'
 
 def generate_pdf_file(response, selected_tickets):
-    # fn = 'C:/Users/romad/Desktop/CinemaStore/cinema_store/static/Roboto-Regular.ttf'
-    # pdfmetrics.registerFont(ttfonts.TTFont('Roboto', fn, 'UTF-8'))
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    fn = BASE_DIR / 'cinema_store/static/Roboto-Regular.ttf'
+    pdfmetrics.registerFont(ttfonts.TTFont('Roboto', fn, 'UTF-8'))
     default_font = 'Roboto'
 
     p = canvas.Canvas(response)
-    # p.setFont(default_font, 12)  # Set font and size
+
 
     tickets = Ticket.objects.filter(id__in=selected_tickets)
 
